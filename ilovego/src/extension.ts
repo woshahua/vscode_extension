@@ -34,8 +34,20 @@ async function getGotourContent(){
 	let page = getRandomInt(1, 10);
 	let url = "https://go-tour-jp.appspot.com/" + goTourList[choice] + "/" + page;
 
-	chrome.setDefaultService(new chrome.ServiceBuilder(chromedriver.path).build());
-	const browser = new webdriver.Builder().withCapabilities(webdriver.Capabilities.chrome()).build();
+	// chrome options
+	const capabilities = webdriver.Capabilities.chrome();
+	capabilities.set('chromeOptions', {
+    args: [
+        '--headless',
+        '--no-sandbox',
+        '--disable-gpu',
+        `--window-size=1980,1200`
+        // other chrome options
+	    ]
+	});
+
+	// chrome.setDefaultService(new chrome.ServiceBuilder(chromedriver.path).build());
+	const browser = await new webdriver.Builder().withCapabilities(capabilities).build();
 	await browser.get(url);
 	sleep(500);
 
