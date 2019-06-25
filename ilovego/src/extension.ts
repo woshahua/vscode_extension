@@ -47,10 +47,11 @@ async function getGotourContent(){
 
 	const browser = await new webdriver.Builder().forBrowser("chrome").withCapabilities(capabilities).build();
 	await browser.get(url);
-	sleep(500);
+	sleep(300);
 
     let html = await browser.executeScript(function() {
-        return document.getElementsByClassName('slide-content ng-binding')[0].innerHTML;
+		return document.getElementsByClassName('CodeMirror-line')[0].innerHTML; 
+		// return document.getElementsByClassName('slide-content ng-binding')[0].innerHTML;
 	});
 
 	await browser.quit();
