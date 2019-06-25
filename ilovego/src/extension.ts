@@ -11,7 +11,7 @@ import { start } from 'repl';
 export function activate(context: vscode.ExtensionContext) {
 
 		console.log('Congratulations, your extension "ilovego" is now active!');
-	let disposable = vscode.commands.registerCommand('extension.helloWorld', () => {
+		let disposable = vscode.commands.registerCommand('extension.helloWorld', () => {
 		const panel = vscode.window.createWebviewPanel(
 			"helloWorld",
 			"cat coding",
@@ -26,17 +26,16 @@ export function activate(context: vscode.ExtensionContext) {
 
 async function getGotourContent(){
 	const webdriver = require("selenium-webdriver");
-	const chrome = require("selenium-webdriver/chrome");
 	const chromedriver = require("chromedriver");
 
-	const goTourList = ["welcome", "basics", "flowcontrol", "moretypes", "methods", "concurrency"]
+	const goTourList = ["welcome", "basics", "flowcontrol", "moretypes", "methods", "concurrency"];
 	let choice = getRandomInt(0, goTourList.length);
 	let page = getRandomInt(1, 10);
 	let url = "https://go-tour-jp.appspot.com/" + goTourList[choice] + "/" + page;
 
 	// chrome options
 	const capabilities = webdriver.Capabilities.chrome();
-	capabilities.set('chromeOptions', {
+	capabilities.set('goog:chromeOptions', {
     args: [
         '--headless',
         '--no-sandbox',
@@ -46,8 +45,7 @@ async function getGotourContent(){
 	    ]
 	});
 
-	// chrome.setDefaultService(new chrome.ServiceBuilder(chromedriver.path).build());
-	const browser = await new webdriver.Builder().withCapabilities(capabilities).build();
+	const browser = await new webdriver.Builder().forBrowser("chrome").withCapabilities(capabilities).build();
 	await browser.get(url);
 	sleep(500);
 
