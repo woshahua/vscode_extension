@@ -1,5 +1,5 @@
 import * as vscode from "vscode";
-import goTourView from "./goTourView";
+import {GotourView} from "./goTourView";
 
 export class Scheduler{
     public constructor(private context: vscode.ExtensionContext){
@@ -7,7 +7,7 @@ export class Scheduler{
 
     public start(){
         setInterval(()=>{
-            goTourView.show(this.context);
-        }, 100);
+            GotourView.show(this.context);
+        }, 10000);
     }
 }

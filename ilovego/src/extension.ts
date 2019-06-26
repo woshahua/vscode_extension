@@ -2,75 +2,19 @@
 // Import the module and reference it with the alias vscode in your code below
 import * as vscode from 'vscode';
 import { start } from 'repl';
-// const superagent = require("superagent");
-// const cheerio = require("cheerio");
+import { Scheduler } from './scheduler';
+import {GotourView} from "./goTourView";
 
 
 // this method is called when your extension is activated
 // your extension is activated the very first time the command is executed
 export function activate(context: vscode.ExtensionContext) {
-
-		console.log('Congratulations, your extension "ilovego" is now active!');
-		let disposable = vscode.commands.registerCommand('extension.helloWorld', () => {
-		const panel = vscode.window.createWebviewPanel(
-			"helloWorld",
-			"cat coding",
-			vscode.ViewColumn.One,
-			{}
-		);
-		(async function test(){
-			panel.webview.html = await getGotourContent();
-		})();
-	});
+	const scheduler = new Scheduler(context);
+	scheduler.start();
+	context.subscriptions.push(vscode.commands.registerCommand('extension.iloveGo', () => {
+		GotourView.show(context);
+	}));
 }
 
-async function getGotourContent(){
-	const webdriver = require("selenium-webdriver");
-	const chromedriver = require("chromedriver");
-
-	const goTourList = ["welcome", "basics", "flowcontrol", "moretypes", "methods", "concurrency"];
-	let choice = getRandomInt(0, goTourList.length);
-	let page = getRandomInt(1, 10);
-	let url = "https://go-tour-jp.appspot.com/" + goTourList[choice] + "/" + page;
-
-	// chrome options
-	const capabilities = webdriver.Capabilities.chrome();
-	capabilities.set('goog:chromeOptions', {
-    args: [
-        '--headless',
-        '--no-sandbox',
-        '--disable-gpu',
-        `--window-size=1980,1200`
-        // other chrome options
-	    ]
-	});
-
-	const browser = await new webdriver.Builder().forBrowser("chrome").withCapabilities(capabilities).build();
-	await browser.get(url);
-	sleep(300);
-
-    let html = await browser.executeScript(function() {
-		return document.getElementsByClassName('CodeMirror-line')[0].innerHTML; 
-		// return document.getElementsByClassName('slide-content ng-binding')[0].innerHTML;
-	});
-
-	await browser.quit();
-	return '<!DOCTYPE html><html lang="en"><head><meta charset="UTF-8"><meta name="viewport" content="width=device-width, initial-scale=1.0">'
-	+ '<title>Golang is the best</title></head><body><img src="https://media.giphy.com/media/JIX9t2j0ZTN9S/giphy.gif" width="300" />'
-	+ html + '</body></html>';
-
-}
-
-function getRandomInt(min:number, max:number) {
-	min = Math.ceil(min);
-	max = Math.floor(max);
-	return Math.floor(Math.random() * (max - min)) + min;
-}
-
-function sleep(miliseconds: number){
-	var startMiliseconds = new Date();
-	while (new Date().getTime() - new Date(startMiliseconds).getTime() < miliseconds){
-	};
-}
 
 export function deactivate() {}
