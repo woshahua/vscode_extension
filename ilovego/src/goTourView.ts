@@ -19,8 +19,9 @@ export class GotourView{
 
         const goTourList = ["welcome", "basics", "flowcontrol", "moretypes", "methods", "concurrency"];
         let choice = this.getRandomInt(0, goTourList.length);
-        let page = this.getRandomInt(1, 10);
+        let page = this.getRandomInt(1, 30);
         let url = "https://go-tour-jp.appspot.com/" + goTourList[choice] + "/" + page;
+        let picChoice = this.getRandomInt(0, 5);
 
         // chrome options
         const capabilities = webdriver.Capabilities.chrome();
@@ -38,6 +39,8 @@ export class GotourView{
         await browser.get(url);
         this.sleep(300);
 
+        const pics = ["https://imgur.com/k2egScr.gif", "https://imgur.com/Bhw9fP0.gif", "https://imgur.com/XnKdpND.gif", "https://imgur.com/Jega6Ik.gif", "https://imgur.com/C7XfK2x.gif"];
+
         let html = await browser.executeScript(function() {
             // return document.getElementsByClassName('CodeMirror-line')[0].innerHTML; 
             return document.getElementsByClassName('slide-content ng-binding')[0].innerHTML;
@@ -45,7 +48,7 @@ export class GotourView{
 
         await browser.quit();
         return '<!DOCTYPE html><html lang="en"><head><meta charset="UTF-8"><meta name="viewport" content="width=device-width, initial-scale=1.0">'
-        + '<title>Golang is the best</title></head><body><img src="https://media.giphy.com/media/JIX9t2j0ZTN9S/giphy.gif" width="300" />'
+        + '<title>Golang is the best</title></head><body><img src =' + pics[picChoice] + 'width="300" />' + '<a href="http://localhost:8082">goをたたく</a>'
         + html + '</body></html>';
 
     }
